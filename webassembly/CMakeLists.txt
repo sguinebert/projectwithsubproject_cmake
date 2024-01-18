@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2) # Specify your version
 
-set(CMAKE_TOOLCHAIN_FILE C:/Users/gsylv/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
+set(CMAKE_TOOLCHAIN_FILE ${EMSCRIPTEN_PATH}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
 project(WebAssemblySubproject)
 
 
