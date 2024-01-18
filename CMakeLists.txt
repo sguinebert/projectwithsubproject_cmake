@@ -17,10 +17,12 @@ ExternalProject_Add(
     webassembly
     SOURCE_DIR "${CMAKE_SOURCE_DIR}/webassembly"
     BINARY_DIR "${CMAKE_BINARY_DIR}/webassembly"
-    CONFIGURE_COMMAND "${EMSCRIPTEN_PATH}/upstream/emscripten/emcmake" cmake <SOURCE_DIR>
+    CONFIGURE_COMMAND "${EMSCRIPTEN_PATH}/upstream/emscripten/emcmake" cmake -DWEBASSEMBLY_BUILD=ON <SOURCE_DIR>
     BUILD_COMMAND "${EMSCRIPTEN_PATH}/upstream/emscripten/emmake" make
     INSTALL_COMMAND ""
 )
+
+option(WEBASSEMBLY_BUILD "Build wasm and exe" OFF)
 
 # ... add other subprojects as needed
 

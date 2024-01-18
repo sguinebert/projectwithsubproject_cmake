@@ -8,7 +8,9 @@ project(WebAssemblySubproject)
 add_executable(WebAssemblyExecutable main.cpp
 )
 
+if(NOT WEBASSEMBLY_BUILD)
 set_target_properties(WebAssemblyExecutable PROPERTIES EXCLUDE_FROM_ALL TRUE)
+endif()
 
 
 # ... more configurations
