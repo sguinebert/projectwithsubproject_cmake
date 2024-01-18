@@ -10,7 +10,6 @@ add_subdirectory(webassembly)
 
 
 include(ExternalProject)
-set(EMSCRIPTEN_TOOLCHAIN_FILE "C:/Users/gsylv/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake")
 set(EMSCRIPTEN_PATH "C:/Users/gsylv/emsdk")
 
 ExternalProject_Add(
