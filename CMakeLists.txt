@@ -24,6 +24,9 @@ ExternalProject_Add(
 option(WEBASSEMBLY_BUILD "Build wasm and exe" OFF)
 
 # ... add other subprojects as needed
+find_package(Wt REQUIRED)
+target_link_libraries(project PRIVATE Wt)
+
 
 # If your main project also has source files, you can add them here
 add_executable(project main.cpp)
