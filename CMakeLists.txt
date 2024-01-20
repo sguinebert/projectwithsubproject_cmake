@@ -24,8 +24,11 @@ ExternalProject_Add(
 option(WEBASSEMBLY_BUILD "Build wasm and exe" OFF)
 
 # ... add other subprojects as needed
+#list(APPEND CMAKE_PREFIX_PATH "/custom/path")
+#or find_package(SomeLibrary REQUIRED PATHS "/custom/path")
 find_package(Wt REQUIRED)
 target_link_libraries(project PRIVATE Wt)
+#target_include_directories(project PRIVATE ${Wt_INCLUDE_DIRS})
 
 
 # If your main project also has source files, you can add them here
