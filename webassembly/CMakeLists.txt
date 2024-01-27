@@ -1,20 +1,31 @@
-cmake_minimum_required(VERSION 3.16) # Specify your version
+cmake_minimum_required(VERSION 3.5) # Specify your version
 
-set(CMAKE_TOOLCHAIN_FILE ${EMSCRIPTEN_PATH}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake)
-project(WebAssemblySubproject VERSION 0.1 LANGUAGES CXX)
+project(WebAssembly VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Core Quick)
+# set(QT_POSSIBLE_PATHS
+#     "/opt/Qt"                     # Common path for system-wide installations in Linux
+#     "~/Qt"                        # In user's home directory (Linux/macOS)
+#     "$ENV{HOME}/Qt"               # Another way to refer to user's home directory
+#     "C:/Qt"                       # Common path in Windows
+#     "$ENV{USERPROFILE}/Documents/Qt" # User's Documents folder in Windows
+# )
+# # Convert the list to a string with the platform-specific path separator
+# string(REPLACE ";" ":" QT_PATHS_STR "${QT_POSSIBLE_PATHS}")
+# # Set CMAKE_PREFIX_PATH to include these paths
+
+#find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+
+message(STATUS "Qt6_FOUND: ${Qt6_FOUND}")
 
 qt_standard_project_setup()
 
 # Set up the sources, include directories, and any necessary flags
 add_executable(WebAssembly main.cpp
 )
-#qt_add_executable(apptest_qtquick
-#    main.cpp
-#)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
