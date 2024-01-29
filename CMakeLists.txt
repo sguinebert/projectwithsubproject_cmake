@@ -47,8 +47,66 @@ set(WASM_PATH "${QT_INSTALL_PREFIX}/wasm_singlethread")
 
 message(STATUS "Qt install path: ${QT_INSTALL_PREFIX} ${CMAKE_BINARY_DIR}")
 
+# Path to a file that will act as a trigger for rebuilds
+set(WEBASSEMBLY_TRIGGER "${CMAKE_BINARY_DIR}/webassembly_trigger")
+set(HASH_FILE "${CMAKE_BINARY_DIR}/hash_file")
+
+
+file(GLOB_RECURSE WEBASSEMBLY_SOURCES
+     "${CMAKE_CURRENT_SOURCE_DIR}/webassembly/*.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/webassembly/*.h"
+     # Add other file extensions as needed
+)
+
+#message(STATUS "source files: ${WEBASSEMBLY_SOURCES}")
+# Compute hash for each file and concatenate
+# set(COMBINED_HASH "")
+# foreach(SOURCE_FILE IN LISTS WEBASSEMBLY_SOURCES)
+#     file(SHA256 ${SOURCE_FILE} FILE_HASH)
+#     string(APPEND COMBINED_HASH ${FILE_HASH})
+# endforeach()
+
+# # Check if the hash has changed
+# if(EXISTS ${HASH_FILE})
+#     file(READ ${HASH_FILE} LAST_HASH)
+#     if(NOT LAST_HASH STREQUAL COMBINED_HASH)
+#         set(HASH_CHANGED TRUE)
+#         message(STATUS "Source changed, updating...")
+#         file(WRITE ${HASH_FILE} ${COMBINED_HASH})
+#         execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
+#     endif()
+# else()
+#     set(HASH_CHANGED TRUE)
+#     message(STATUS "never executed, updating...")
+#     file(WRITE ${HASH_FILE} ${COMBINED_HASH})
+#     execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
+# endif()
+
+# # Update the hash file
+# if(NOT HASH_CHANGED)
+#     message(STATUS "No source changes detected.")
+#     execute_process(COMMAND ${CMAKE_COMMAND} -E exit 1)    # Add custom commands or steps to build the external project
+#     # ...
+# endif()
+
+
+# Custom command to update the trigger file
+add_custom_command(
+    OUTPUT ${WEBASSEMBLY_TRIGGER}
+    COMMAND ${CMAKE_COMMAND} -E touch ${WEBASSEMBLY_TRIGGER}
+    DEPENDS ${WEBASSEMBLY_SOURCES}
+    COMMENT "Checking for WebAssembly source changes..."
+)
+
+add_custom_target(webassembly_trigger_target
+    ALL
+    DEPENDS ${HASH_FILE}
+)
+
 ExternalProject_Add(
     webassembly
+    #DEPENDS webassembly_trigger_target
+    UPDATE_COMMAND ${CMAKE_COMMAND} -P "${CMAKE_SOURCE_DIR}/check_for_changes.cmake"
     SOURCE_DIR "${CMAKE_SOURCE_DIR}/webassembly"
     BINARY_DIR "${CMAKE_BINARY_DIR}/webassembly"
     CONFIGURE_COMMAND "${EMSCRIPTEN_PATH}/upstream/emscripten/emcmake" cmake
@@ -166,28 +224,10 @@ ExternalProject_Add(
 
 option(WEBASSEMBLY_BUILD "Build wasm and exe" OFF)
 
-# Path to a file that will act as a trigger for rebuilds
-set(WEBASSEMBLY_TRIGGER "${CMAKE_BINARY_DIR}/webassembly_trigger")
-
-# Custom target to create the trigger file
-# add_custom_target(create_webassembly_trigger
-#     COMMAND ${CMAKE_COMMAND} -E touch ${WEBASSEMBLY_TRIGGER}
-#     COMMENT "Creating the WebAssembly trigger file"
-# )
-
-# add_dependencies(webassembly create_webassembly_trigger)
-
-# Custom command to update the trigger file
-add_custom_command(
-    OUTPUT ${WEBASSEMBLY_TRIGGER}
-    COMMAND ${CMAKE_COMMAND} -E touch ${WEBASSEMBLY_TRIGGER}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/webassembly
-    DEPENDS ${CMAKE_SOURCE_DIR}/webassembly/*  # Assuming all files in the directory are relevant
-    COMMENT "Checking for WebAssembly source changes..."
-)
+#add_dependencies(webassembly webassembly_trigger_target)
 
 # Ensure that the external project depends on the trigger
-add_dependencies(webassembly ${WEBASSEMBLY_TRIGGER})
+#add_dependencies(webassembly ${WEBASSEMBLY_TRIGGER})
 
 # ... add other subprojects as needed
 #list(APPEND CMAKE_PREFIX_PATH "/custom/path")
