@@ -34,7 +34,7 @@ awaitable<std::unique_ptr<Wt::WApplication>> createApplication(const WEnvironmen
 
     app->instance()->setTitle("Testing Page");
 
-    auto wasm = root->addWidget(std::make_unique<WWebassembly>("webassembly", "./webassembly/webassembly", "app/webassembly"));
+    auto wasm = root->addWidget(std::make_unique<WWebassembly>("webassembly", "./webassembly/webassembly", "app/WebAssembly"));
     wasm->decorationStyle().setBackgroundColor(WColor(StandardColor::Cyan));
     wasm->resize(800, 600);
 
@@ -71,12 +71,12 @@ int main(int argc, char **argv)
 
         server.addEntryPoint(EntryPointType::Application, std::bind(createApplication, std::placeholders::_1), "/app");
 
-        std::string pp = "./webassembly/webassembly";
+        std::string pp = "./webassembly/WebAssembly";
         auto wasmresource = new WMemoryResource("application/wasm",  pp + ".wasm");
-        server.addResource(wasmresource, "webassembly.wasm");
+        server.addResource(wasmresource, "WebAssembly.wasm");
 
         auto jsresource = new WMemoryResource("application/javascript", pp + ".js");
-        server.addResource(jsresource, "webassembly.js");
+        server.addResource(jsresource, "WebAssembly.js");
 
         if (server.start()) {
             int sig = Wt::WServer::waitForShutdown();

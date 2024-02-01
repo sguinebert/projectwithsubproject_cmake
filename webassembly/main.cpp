@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    std::cout << "hello qt for webassembly" << std::endl;
+    std::cout << "hello qt for webassembly dsfvdfvfdv" << std::endl;
 
     QQmlApplicationEngine engine;
 
@@ -45,6 +45,6 @@ int main(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         }, Qt::QueuedConnection);
     engine.load(url);
-    std::cout <<"d" <<std::endl;
+    //std::cout <<"d" <<std::endl;
     return app.exec();
 }
