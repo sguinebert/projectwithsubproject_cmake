@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    std::cout << "hello qt for webassembly dsfvdfvfdv" << std::endl;
+    std::cout << "hello qt for webassembly dsfvdfvffvdfvvfdv" << std::endl;
 
     QQmlApplicationEngine engine;
 

@@ -63,54 +63,10 @@ file(GLOB_RECURSE WEBASSEMBLY_SOURCES
      # Add other file extensions as needed
 )
 
-#message(STATUS "source files: ${WEBASSEMBLY_SOURCES}")
-# Compute hash for each file and concatenate
-# set(COMBINED_HASH "")
-# foreach(SOURCE_FILE IN LISTS WEBASSEMBLY_SOURCES)
-#     file(SHA256 ${SOURCE_FILE} FILE_HASH)
-#     string(APPEND COMBINED_HASH ${FILE_HASH})
-# endforeach()
-
-# # Check if the hash has changed
-# if(EXISTS ${HASH_FILE})
-#     file(READ ${HASH_FILE} LAST_HASH)
-#     if(NOT LAST_HASH STREQUAL COMBINED_HASH)
-#         set(HASH_CHANGED TRUE)
-#         message(STATUS "Source changed, updating...")
-#         file(WRITE ${HASH_FILE} ${COMBINED_HASH})
-#         execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
-#     endif()
-# else()
-#     set(HASH_CHANGED TRUE)
-#     message(STATUS "never executed, updating...")
-#     file(WRITE ${HASH_FILE} ${COMBINED_HASH})
-#     execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
-# endif()
-
-# # Update the hash file
-# if(NOT HASH_CHANGED)
-#     message(STATUS "No source changes detected.")
-#     execute_process(COMMAND ${CMAKE_COMMAND} -E exit 1)    # Add custom commands or steps to build the external project
-#     # ...
-# endif()
-
-
-# Custom command to update the trigger file
-# add_custom_command(
-#     OUTPUT ${WEBASSEMBLY_TRIGGER}
-#     COMMAND ${CMAKE_COMMAND} -E touch ${WEBASSEMBLY_TRIGGER}
-#     DEPENDS ${WEBASSEMBLY_SOURCES}
-#     COMMENT "Checking for WebAssembly source changes..."
-# )
-
-# add_custom_target(webassembly_trigger_target
-#     ALL
-#     DEPENDS ${HASH_FILE}
-# )
-#/home/guinebert/emsdk/node/14.18.2_64bit/bin:/home/guinebert/emsdk/upstream/emscripten:/home/guinebert/emsdk:/home/guinebert/emsdk/node/14.18.2_64bit/bin:/home/guinebert/emsdk/upstream/emscripten:/home/guinebert/emsdk:/home/guinebert/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/postgresql/13/bin:/snap/bin:/home/guinebert/Qt/Tools/Ninja
 ExternalProject_Add(
     webassembly
     #DEPENDS webassembly_trigger_target
+    UPDATE_COMMAND ""
     #UPDATE_COMMAND ${CMAKE_COMMAND} -P "${CMAKE_SOURCE_DIR}/check_for_changes.cmake"
     SOURCE_DIR "${CMAKE_SOURCE_DIR}/webassembly"
     BINARY_DIR "${CMAKE_BINARY_DIR}/webassembly"
@@ -240,15 +196,11 @@ ExternalProject_Add(
     ${CMAKE_SOURCE_DIR}/webassembly
     BUILD_COMMAND "${EMSCRIPTEN_PATH}/upstream/emscripten/emmake" ninja -j32
     INSTALL_COMMAND ""
-    #BUILD_ALWAYS OFF
+    BUILD_ALWAYS ON
 )
 
 option(WEBASSEMBLY_BUILD "Build wasm and exe" OFF)
 
-#add_dependencies(webassembly webassembly_trigger_target)
-
-# Ensure that the external project depends on the trigger
-#add_dependencies(webassembly ${WEBASSEMBLY_TRIGGER})
 
 # ... add other subprojects as needed
 #list(APPEND CMAKE_PREFIX_PATH "/custom/path")
@@ -267,9 +219,6 @@ add_executable(project main.cpp)
 
 # Link against libraries if necessary
 target_link_libraries(project PRIVATE Wt::Wt)
-
-# target_link_libraries(project PRIVATE ${WT_LIBRARY})
-# target_include_directories(project PRIVATE ${Wt_INCLUDE_DIRS})
 
 find_package(ZLIB)
 
