@@ -22,18 +22,18 @@ if(EXISTS ${HASH_FILE})
         set(HASH_CHANGED TRUE)
         message(STATUS "Source changed, updating...")
         file(WRITE ${HASH_FILE} ${COMBINED_HASH})
-        execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
+        execute_process(COMMAND ${CMAKE_COMMAND} -E false)
     endif()
 else()
     set(HASH_CHANGED TRUE)
     message(STATUS "never executed, updating...")
     file(WRITE ${HASH_FILE} ${COMBINED_HASH})
-    execute_process(COMMAND ${CMAKE_COMMAND} -E exit 0)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E false)
 endif()
 
 # Update the hash file
 if(NOT HASH_CHANGED)
     message(STATUS "No source changes detected.")
-    execute_process(COMMAND ${CMAKE_COMMAND} -E exit 1)    # Add custom commands or steps to build the external project
+    execute_process(COMMAND ${CMAKE_COMMAND} -E true)        # Add custom commands or steps to build the external project
     # ...
 endif()
